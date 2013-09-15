@@ -1,0 +1,37 @@
+{
+  "name": "mimosa-es6-module-transpiler",
+  "version": "0.0.1",
+  "homepage": "https://github.com/dbashford/mimosa-es6-module-transpiler",
+  "author": "David Bashford",
+  "description": "An ES6 module transpiler for Mimosa",
+  "contributors": [
+    {
+      "name": "David Bashford",
+      "email": "dbashford@hotmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dbashford/mimosa-es6-module-transpiler"
+  },
+  "keywords": [
+    "mimosa",
+    "mmodule",
+    "es6",
+    "harmony",
+    "module",
+    "amd",
+    "commonjs"
+  ],
+  "dependencies": {
+    "logmimosa": "0.5.0"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.10"
+  },
+  "main": "./lib/index",
+  "scripts": {
+    "prepublish": "mimosa build"
+  }
+}
