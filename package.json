@@ -1,6 +1,6 @@
 {
   "name": "mimosa-es6-module-transpiler",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "homepage": "https://github.com/dbashford/mimosa-es6-module-transpiler",
   "author": "David Bashford",
   "description": "An ES6 module transpiler for Mimosa",
@@ -24,7 +24,8 @@
     "commonjs"
   ],
   "dependencies": {
-    "logmimosa": "0.5.0"
+    "logmimosa": "0.5.0",
+    "es6-module-transpiler":"0.2.0"
   },
   "license": "MIT",
   "engines": {
