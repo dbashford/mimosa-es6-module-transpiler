@@ -44,9 +44,10 @@ define(
   });
 ```
 
-Note: The ES6 transpiler currently does not support source maps. So source maps will not be generated, nor will source maps already present (as from CoffeeScript) be honored or updated.  They will not, however, be removed.
 
-Note: The ES6 module syntax is fluid and may change down the road.
+__Note__: The ES6 transpiler currently does not support source maps. So source maps will not be generated, nor will source maps already present (as from CoffeeScript) be honored or updated.  They will not, however, be removed.
+
+__Note__: The ES6 module syntax is fluid and may change down the road.
 
 ## Default Config
 
