@@ -14,7 +14,9 @@ Add `'es6-module-transpiler'` to your list of modules.  That's all!  Mimosa will
 
 This module will take your ES6 module syntax code and compile it down to a syntax usable with common module loaders AMD and CommonJS.
 
-For example, the following CoffeeScript...
+This module's functionality is applied after Mimosa has compiled the source, which means after CoffeeScript/LiveScript etc have been transpiled to JavaScript. So the source language's Embedded JavaScript features need to be used to preserve the ES6 syntax and to encourage the source language's compiler to ignore the syntax.
+
+For example, the following CoffeeScript (note the backticks in the CoffeeScript code)...
 
 ```coffeescript
 `import $ from "jquery"`
