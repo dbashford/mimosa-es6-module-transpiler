@@ -2,7 +2,7 @@ mimosa-es6-module-transpiler
 ===========
 ## Overview
 
-This module will allow you to utilize ES6 module syntax when building your client code.  It will transpile your JavaScript with ES6 syntax to AMD or CommonJS compliant JavaScript.  It can also output code that attaches module to global scope.
+This module will allow you to utilize ES6 module syntax when building your client code.  It will transpile your JavaScript with ES6 syntax to AMD or CommonJS compliant JavaScript.  It can also output code that attaches modules to global scope.
 
 For more information regarding Mimosa, see http://mimosa.io
 
@@ -59,9 +59,9 @@ es6Modules:
   globals:{}
 ```
 
-- `type`: "amd" or "common"
+- `type`: "amd", "common", or "globals"
 - `exclude`:  List of regexes or strings to match files that should be excluded from transpiling.  String paths can be absolute or relative to the watch.sourceDir.  Regexes are applied to the entire path. By default anything in a vendor folder and anything that begins with `main.` or `main-` are excluded as presumably those should not be wrapped in a define as they are likely shimmed to be shimmed.
-- `globals`: `globals` contains configurations for modules that you want to export themselves globally if you are not using a module loading strategy. See the Example Config below for an example config.
+- `globals`: `globals` contains configurations for modules that you want to export themselves globally if you are not using a module loading strategy. See the Example Config below for example usage of the `globals` config.
 
 ## Example Config
 
@@ -69,12 +69,12 @@ es6Modules:
 es6Modules:
   type:"globals"
   globals:
-    "/javascripts/app/example.coffee":
+    "/javascripts/app/example":
       global: "ExampleApp"
       imports:
         jquery: "$"
 ````
 
-- `global`'s keys are file paths to files in the `watch.sourceDir`. Each file that needs to export globally needs to have a path provided here.
+- `global`'s keys are file paths to files in the `watch.sourceDir`. Each file that needs to export globally needs to have a path provided here. The path can include or not include the extension.
 - `global`: `global` is the name of the global object that the export from the module gets attached to, if not provided it gets attached to window.
 - `imports`: contains dependencies for the module, with the key being the variable name once imported and the value being the global name of the object to be imported. Any files not listed in globals are treated with the `type` config of either amd or common.

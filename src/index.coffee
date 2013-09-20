@@ -1,5 +1,7 @@
 "use strict"
 
+path = require 'path'
+
 logger = require 'logmimosa'
 Compiler = require("es6-module-transpiler").Compiler
 
@@ -18,8 +20,10 @@ _transpile = (mimosaConfig, options, next) ->
       logger.debug "skipping es6Modules transpiling for [[ #{f.inputFileName} ]], file is excluded via string path"
     else
       if f.outputFileText
-        cOpts = mimosaConfig.es6Modules.globals?[f.inputFileName] || {}
+        withNoExt = f.inputFileName.replace path.extname(f.inputFileName), ''
+        cOpts = mimosaConfig.es6Modules.globals?[withNoExt] || mimosaConfig.es6Modules.globals?[f.inputFileName] || {}
         cOpts.type = mimosaConfig.es6Modules.type
+        logger.debug "ES6 transpile of file [[ #{f.inputFileName} ]]"
         compiler = new Compiler f.outputFileText, null, cOpts
         f.outputFileText = if cOpts.type is "amd"
           compiler.toAMD()
