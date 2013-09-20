@@ -14,9 +14,9 @@ Add `'es6-module-transpiler'` to your list of modules.  That's all!  Mimosa will
 
 This module will take your ES6 module syntax code and compile it down to a syntax usable with common module specs: AMD and CommonJS.
 
-It will also allow you to compile it down to a format that exports code globally. If a module is exported globally, it needs to declare any `imports` it might have.  See the Example Config below.
+It will also allow you to compile it down to a format that exports code globally. If a module is exported globally, you may want to declare any `imports` it might have.  See the Example Config below.
 
-This module's functionality is applied after Mimosa has compiled the source, which means after CoffeeScript/LiveScript etc have been transpiled to JavaScript. So the source language's Embedded JavaScript features need to be used to preserve the ES6 syntax and to encourage the source language's compiler to ignore the syntax.
+Using a JavaScript transpiler like CoffeeScript? This module's functionality is applied after Mimosa has compiled source source code, which means after CoffeeScript/LiveScript etc have been transpiled to JavaScript. So the source language's Embedded JavaScript features need to be used to preserve the ES6 syntax and to keep transpilation from failing.
 
 For example, the following CoffeeScript (note the backticks in the CoffeeScript code)...
 
@@ -49,6 +49,9 @@ define(
 __Note__: The ES6 transpiler currently does not support source maps. So source maps will not be generated, nor will source maps already present (as from CoffeeScript) be honored or updated.  They will not, however, be removed.
 
 __Note__: The ES6 module syntax is fluid and may change down the road.
+
+__Note__: This does not support the full set of ES6 module syntax, but it does the support the major pieces. This module wraps [square's transpiler](https://github.com/square/es6-module-transpiler), so as it adds features and more feature support this module will benefit.
+
 
 ## Default Config
 
