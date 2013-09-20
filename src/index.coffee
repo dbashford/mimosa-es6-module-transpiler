@@ -19,15 +19,15 @@ _transpile = (mimosaConfig, options, next) ->
       logger.debug "skipping commonjs wrapping for [[ #{f.inputFileName} ]], file is excluded via string path"
     else
       if f.outputFileText
-        f.outputFileText = if mimosaConfig.es6Modules?.globals[f.inputFileName]
-          compiler = new Compiler(f.outputFileText, null, mimosaConfig.es6Modules.globals[f.inputFileName])
-          compiler.toGlobals()
+        cOpts = mimosaConfig.es6Modules.globals?[f.inputFileName] || {}
+        cOpts.type = mimosaConfig.es6Modules.type
+        compiler = new Compiler f.outputFileText, null, cOpts
+        f.outputFileText = if cOpts.type is "amd"
+          compiler.toAMD()
+        else if cOpts.type is "common"
+          compiler.toCJS()
         else
-          compiler = new Compiler f.outputFileText, null, {type:mimosaConfig.es6Modules.type}
-          if mimosaConfig.es6Modules.type is "amd"
-            compiler.toAMD()
-          else
-            compiler.toCJS()
+          compiler.toGlobals()
 
   next()
 

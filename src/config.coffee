@@ -13,10 +13,11 @@ exports.placeholder = ->
   \t
 
     # es6Modules:
-      # type:"amd"              # output type, either "amd" or "common"
+      # type:"amd"              # output type, either "amd" or "common" or "globals"
       # globals: {}             # globals contains configurations for modules that you want to
                                 # export themselves globally if you are not using a module loading
-                                # strategy. Each entry in the object takes this form:
+                                # strategy. This section is only valid when "globals" is the type.
+                                # Each entry in the object takes this form:
                                 # {
                                 #   filePath : {
                                 #     global: "GlobalNamespaceName",
@@ -47,22 +48,24 @@ exports.validate = (config, validators) ->
   errors = []
   if validators.ifExistsIsObject(errors, "es6Modules config", config.es6Modules)
     if validators.ifExistsIsString(errors, "es6Modules.type", config.es6Modules.type)
-      if ["amd", "common"].indexOf(config.es6Modules.type) is -1
-        errors.push "es6Modules.type must be either 'amd' or 'common'."
+      if ["amd", "common", "globals"].indexOf(config.es6Modules.type) is -1
+        errors.push "es6Modules.type must be either 'amd', 'common' or 'globals'."
 
     validators.ifExistsFileExcludeWithRegexAndString(errors, "es6Modules.exclude", config.es6Modules, config.watch.sourceDir)
 
     if validators.ifExistsIsObject(errors, "es6Modules.globals", config.es6Modules.globals)
-      newGlobals = {}
-      for globalFilePath, globalConfig of config.es6Modules.globals
-        globalConfig.type = "globals"
-        if validators.ifExistsIsString(errors, "es6Modules.globals.global", globalConfig.global)
-          globalConfig.into = globalConfig.global
-        fullPath = path.join config.watch.sourceDir, globalFilePath
-        newGlobals[fullPath] = globalConfig
-        if validators.ifExistsIsObject(errors, "es6Modules.globals.imports", globalConfig.imports)
-          for varName, globalName of globalConfig.imports
-            validators.ifExistsIsString(errors, "es6Modules.globals.imports value", globalName)
-      config.es6Modules.globals = newGlobals
+      if config.es6Modules.type isnt "globals" and Object.keys(config.es6Modules.globals).length > 0
+        errors.push "You have globals configured, but not chosen as the es6Modules.type"
+      else
+        newGlobals = {}
+        for globalFilePath, globalConfig of config.es6Modules.globals
+          if validators.ifExistsIsString(errors, "es6Modules.globals.global", globalConfig.global)
+            globalConfig.into = globalConfig.global
+          fullPath = path.join config.watch.sourceDir, globalFilePath
+          newGlobals[fullPath] = globalConfig
+          if validators.ifExistsIsObject(errors, "es6Modules.globals.imports", globalConfig.imports)
+            for varName, globalName of globalConfig.imports
+              validators.ifExistsIsString(errors, "es6Modules.globals.imports value", globalName)
+        config.es6Modules.globals = newGlobals
 
   errors
