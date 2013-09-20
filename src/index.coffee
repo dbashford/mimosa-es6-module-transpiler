@@ -10,20 +10,24 @@ registration = (mimosaConfig, register) ->
   register ['add','update','buildFile'], 'compile', _transpile, e.javascript
 
 _transpile = (mimosaConfig, options, next) ->
+  return next() unless options.files?.length
 
   for f in options.files
-
     if mimosaConfig.es6Modules?.excludeRegex? and f.inputFileName.match mimosaConfig.es6Modules.excludeRegex
       logger.debug "skipping commonjs wrapping for [[ #{f.inputFileName} ]], file is excluded via regex"
     else if mimosaConfig.es6Modules.exclude?.indexOf(f.inputFileName) > -1
       logger.debug "skipping commonjs wrapping for [[ #{f.inputFileName} ]], file is excluded via string path"
     else
       if f.outputFileText
-        compiler = new Compiler f.outputFileText
-        f.outputFileText = if mimosaConfig.es6Modules.type is "amd"
-          compiler.toAMD()
+        f.outputFileText = if mimosaConfig.es6Modules?.globals[f.inputFileName]
+          compiler = new Compiler(f.outputFileText, null, mimosaConfig.es6Modules.globals[f.inputFileName])
+          compiler.toGlobals()
         else
-          compiler.toCJS()
+          compiler = new Compiler f.outputFileText, null, {type:mimosaConfig.es6Modules.type}
+          if mimosaConfig.es6Modules.type is "amd"
+            compiler.toAMD()
+          else
+            compiler.toCJS()
 
   next()
 

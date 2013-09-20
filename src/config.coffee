@@ -1,16 +1,38 @@
 "use strict"
 
+path = require 'path'
+
 exports.defaults = ->
   es6Modules:
     type:"amd"
     exclude:[/[/\\]vendor[/\\]/, /[/\\]main[\.-]/]
+    globals:{}
 
 exports.placeholder = ->
   """
   \t
 
     # es6Modules:
-      # type:"amd"                                      # output type, either "amd" or "common"
+      # type:"amd"              # output type, either "amd" or "common"
+      # globals: {}             # globals contains configurations for modules that you want to
+                                # export themselves globally if you are not using a module loading
+                                # strategy. Each entry in the object takes this form:
+                                # {
+                                #   filePath : {
+                                #     global: "GlobalNamespaceName",
+                                #     imports: {
+                                #       importedVariableName: "globalName"
+                                #     }
+                                #   }
+                                # }
+                                # 'filePath' is the path to the file to be exported globally relative
+                                # to 'watch.sourceDir'; the path must exist. 'global' is the name of
+                                # the global object that the export from the module gets attached to,
+                                # if not provided it gets attached to window. 'imports' contains
+                                # dependencies for the module, with the key being the variable name
+                                # once imported and the value being the global name of the object to
+                                # be imported. Any files not listed in globals are treated with the
+                                # 'type' config of either amd or common.
       # exclude:[/[/\\]vendor[/\\]/, /[/\\]main[\.-]/]  # List of regexes or strings to match
                                 # files that should be excluded from transpiling.  String paths can
                                 # be absolute or relative to the watch.sourceDir.  Regexes are
@@ -30,5 +52,17 @@ exports.validate = (config, validators) ->
 
     validators.ifExistsFileExcludeWithRegexAndString(errors, "es6Modules.exclude", config.es6Modules, config.watch.sourceDir)
 
+    if validators.ifExistsIsObject(errors, "es6Modules.globals", config.es6Modules.globals)
+      newGlobals = {}
+      for globalFilePath, globalConfig of config.es6Modules.globals
+        globalConfig.type = "globals"
+        if validators.ifExistsIsString(errors, "es6Modules.globals.global", globalConfig.global)
+          globalConfig.into = globalConfig.global
+        fullPath = path.join config.watch.sourceDir, globalFilePath
+        newGlobals[fullPath] = globalConfig
+        if validators.ifExistsIsObject(errors, "es6Modules.globals.imports", globalConfig.imports)
+          for varName, globalName of globalConfig.imports
+            validators.ifExistsIsString(errors, "es6Modules.globals.imports value", globalName)
+      config.es6Modules.globals = newGlobals
 
   errors
