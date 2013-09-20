@@ -6,17 +6,16 @@ Compiler = require("es6-module-transpiler").Compiler
 config = require './config'
 
 registration = (mimosaConfig, register) ->
-  e = mimosaConfig.extensions
-  register ['add','update','buildFile'], 'compile', _transpile, e.javascript
+  register ['add','update','buildFile'], 'compile', _transpile, mimosaConfig.extensions.javascript
 
 _transpile = (mimosaConfig, options, next) ->
   return next() unless options.files?.length
 
   for f in options.files
     if mimosaConfig.es6Modules?.excludeRegex? and f.inputFileName.match mimosaConfig.es6Modules.excludeRegex
-      logger.debug "skipping commonjs wrapping for [[ #{f.inputFileName} ]], file is excluded via regex"
+      logger.debug "skipping es6Modules transpiling for [[ #{f.inputFileName} ]], file is excluded via regex"
     else if mimosaConfig.es6Modules.exclude?.indexOf(f.inputFileName) > -1
-      logger.debug "skipping commonjs wrapping for [[ #{f.inputFileName} ]], file is excluded via string path"
+      logger.debug "skipping es6Modules transpiling for [[ #{f.inputFileName} ]], file is excluded via string path"
     else
       if f.outputFileText
         cOpts = mimosaConfig.es6Modules.globals?[f.inputFileName] || {}
