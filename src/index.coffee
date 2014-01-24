@@ -8,7 +8,7 @@ Compiler = require("es6-module-transpiler").Compiler
 config = require './config'
 
 registration = (mimosaConfig, register) ->
-  register ['add','update','buildFile'], 'compile', _transpile, mimosaConfig.extensions.javascript
+  register ['add','update','buildFile'], 'afterCompile', _transpile, mimosaConfig.extensions.javascript
 
 _transpile = (mimosaConfig, options, next) ->
   return next() unless options.files?.length
