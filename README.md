@@ -55,15 +55,16 @@ __Note__: This does not support the full set of ES6 module syntax, but it does t
 
 ## Default Config
 
-```coffeescript
-es6Modules:
-  type:"amd"
-  exclude:[/[/\\]vendor[/\\]/, /[/\\]main[\.-]/]
+```javascript
+es6Modules: {
+  type:"amd",
+  exclude: [/[/\\]vendor[/\\]/, /[/\\]main[\.-]/, /-main.js$/, /[/\\]common.js$/],
   globals:{}
+}
 ```
 
 - `type`: "amd", "common", or "globals"
-- `exclude`:  List of regexes or strings to match files that should be excluded from transpiling.  String paths can be absolute or relative to the watch.sourceDir.  Regexes are applied to the entire path. By default anything in a vendor folder and anything that begins with `main.` or `main-` are excluded as presumably those should not be wrapped in a define as they are likely shimmed to be shimmed.
+- `exclude`:  List of regexes or strings to match files that should be excluded from transpiling.  String paths can be absolute or relative to the watch.sourceDir.  Regexes are applied to the entire path. Regexes are applied to the entire path. By default anything in a vendor folder and anything that begins with 'main.' or 'main-', or that end in '-main' or 'common.js' are excluded as presumably those should not be wrapped in a  define as they are likely already "require"d or shimmed.
 - `globals`: `globals` contains configurations for modules that you want to export themselves globally if you are not using a module loading strategy. See the Example Config below for example usage of the `globals` config.
 
 ## Example Config
