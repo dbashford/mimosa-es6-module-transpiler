@@ -2,12 +2,14 @@
 
 path = require 'path'
 
-logger = require 'logmimosa'
 Compiler = require("es6-module-transpiler").Compiler
 
 config = require './config'
 
+logger = null
+
 registration = (mimosaConfig, register) ->
+  logger = mimosaConfig.log
   register ['add','update','buildFile'], 'afterCompile', _transpile, mimosaConfig.extensions.javascript
 
 _transpile = (mimosaConfig, options, next) ->
