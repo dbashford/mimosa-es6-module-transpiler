@@ -12,9 +12,9 @@ exports.placeholder = ->
   """
   \t
 
-    # es6Modules:
-      # type:"amd"        # output type, either "amd" or "common" or "globals"
-      # globals: {}       # globals contains configurations for modules that you want to
+    es6Modules:
+      type:"amd"          # output type, either "amd" or "common" or "globals"
+      globals: {}         # globals contains configurations for modules that you want to
                           # export themselves globally if you are not using a module loading
                           # strategy. This section is only valid when "globals" is the type.
                           # Each entry in the object takes this form:
@@ -34,7 +34,7 @@ exports.placeholder = ->
                           # once imported and the value being the global name of the object to
                           # be imported. Any files not listed in globals are treated with the
                           # 'type' config of either amd or common.
-      # exclude:[/[/\\\\]vendor[/\\]/, /[/\\\\]main[\.-]/, /-main.js$/, /[/\\\\]common.js$/]
+      exclude:[/[/\\\\]vendor[/\\]/, /[/\\\\]main[\.-]/, /-main.js$/, /[/\\\\]common.js$/]
                           # List of regexes or strings to match files that should be excluded from
                           # transpiling. String paths can be absolute or relative to the
                           # watch.sourceDir. Regexes are applied to the entire path. By default
