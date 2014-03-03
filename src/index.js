@@ -32,15 +32,19 @@ var _transpile = function( mimosaConfig, options, next ) {
               logger.debug( "ES6 transpile opts:", cOpts);
             }
 
-            var compiler = new Compiler( f.outputFileText, null, cOpts );
-            if ( cOpts.type === "amd" ) {
-              f.outputFileText = compiler.toAMD();
-            } else {
-              if ( cOpts.type === "common" ) {
-                compiler.toCJS();
+            try {
+              var compiler = new Compiler( f.outputFileText, null, cOpts );
+              if ( cOpts.type === "amd" ) {
+                f.outputFileText = compiler.toAMD();
               } else {
-                compiler.toGlobals();
+                if ( cOpts.type === "common" ) {
+                  compiler.toCJS();
+                } else {
+                  compiler.toGlobals();
+                }
               }
+            } catch ( err ) {
+              logger.error( "Error running es6 module transpiler on file [[ " + f.inputFileName + " ]] ", err );
             }
           }
         }
