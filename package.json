@@ -30,7 +30,7 @@
   "engines": {
     "node": ">=0.10"
   },
-  "main": "./lib/index",
+  "main": "./src/index",
   "scripts": {
     "prepublish": "mimosa build"
   }
