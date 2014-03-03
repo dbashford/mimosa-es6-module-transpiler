@@ -1,9 +1,9 @@
 {
-  "name": "mimosa-es6-module-transpiler-amd-shim",
-  "version": "0.1.0",
-  "homepage": "https://github.com/dbashford/mimosa-es6-module-transpiler-amd-shim",
+  "name": "mimosa-es6-module-transpiler",
+  "version": "0.4.3",
+  "homepage": "https://github.com/dbashford/mimosa-es6-module-transpiler",
   "author": "David Bashford",
-  "description": "An ES6 module transpiler AMD shim module for Mimosa",
+  "description": "An ES6 module transpiler for Mimosa",
   "contributors": [
     {
       "name": "David Bashford",
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dbashford/mimosa-es6-module-transpiler-amd-shim"
+    "url": "https://github.com/dbashford/mimosa-es6-module-transpiler"
   },
   "keywords": [
     "mimosa",
@@ -21,10 +21,11 @@
     "harmony",
     "module",
     "amd",
-    "commonjs",
-    "shim",
-    "default"
+    "commonjs"
   ],
+  "dependencies": {
+    "es6-module-transpiler":"0.2.0"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=0.10"

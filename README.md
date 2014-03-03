@@ -1,33 +1,84 @@
-mimosa-es6-module-transpiler-amd-shim
+mimosa-es6-module-transpiler
 ===========
 ## Overview
 
-This module will allow you to utilize the latest verison of the [ES6 module transpiler](http://square.github.io/es6-module-transpiler/) which currently doesn't work properly with AMD due to some breaking changes in `v0.3.0`.
+This module will allow you to utilize ES6 module syntax when building your client code.  It will transpile your JavaScript with ES6 syntax to AMD or CommonJS compliant JavaScript.  It can also output code that attaches modules to global scope.
 
 For more information regarding Mimosa, see http://mimosa.io
 
-For more information regarding Mimosa's es6-module-transpiler, see https://github.com/dbashford/mimosa-es6-module-transpiler
-
 ## Usage
 
-Add `'es6-module-transpiler-amd-shim'` to your list of modules __AFTER__ the `es6-module-transpiler`.  That's all!  Mimosa will install the module for you when you start up.
+Add `'es6-module-transpiler'` to your list of modules.  That's all!  Mimosa will install the module for you when you start up.
 
 ## Functionality
 
-The output es6-module-transpiler output presumes that any library brought in includes `default` property where the libraries export is attached. With `v0.3.0` of the es6-module-transpiler, there were some [internal changes](https://github.com/square/es6-module-transpiler/blob/master/TRANSITION.md#internal-changes) that make it impossible to use AMD libraries if they aren't ES6 compiled themselves.  And so few are.  
+This module will take your ES6 module syntax code and compile it down to a syntax usable with common module specs: AMD and CommonJS.
 
-This shim will patch that so that this:
+It will also allow you to compile it down to a format that exports code globally. If a module is exported globally, you may want to declare any `imports` it might have.  See the Example Config below.
+
+Using a JavaScript transpiler like CoffeeScript? This module's functionality is applied after Mimosa has compiled source source code, which means after CoffeeScript/LiveScript etc have been transpiled to JavaScript. So the source language's Embedded JavaScript features need to be used to preserve the ES6 syntax and to keep transpilation from failing.
+
+For example, the following CoffeeScript (note the backticks in the CoffeeScript code)...
+
+```coffeescript
+`import $ from "jquery"`
+`import templates from "templates"`
+
+class ExampleView
+
+...
+
+`export default ExampleView`
+```
+
+will be compiled to
 
 ```javascript
-var Ember = __dependency1__["default"];
+define(
+  ["jquery","templates"],
+  function($, templates) {
+    "use strict";
+    var ExampleView;
+
+    ...
+
+    return ExampleView;
+  });
 ```
 
-...which will not work, gets turned into this
+__Note__: The ES6 transpiler currently does not support source maps. So source maps will not be generated, nor will source maps already present (as from CoffeeScript) be honored or updated.  They will not, however, be removed.
 
+__Note__: The ES6 module syntax is fluid and may change down the road.
+
+__Note__: This does not support the full set of ES6 module syntax, but it does the support the major pieces. This module wraps [square's transpiler](https://github.com/square/es6-module-transpiler), so as it adds features and more feature support this module will benefit.
+
+
+## Default Config
+
+```javascript
+es6Modules: {
+  type:"amd",
+  exclude: [/[/\\]vendor[/\\]/, /[/\\]main[\.-]/, /-main.js$/, /[/\\]common.js$/],
+  globals:{}
+}
 ```
-var Ember = __dependency1__["default"] || __dependency1__;
-```
 
-which will work.  It also preserves the desired behavior of es6 modules.
+- `type`: "amd", "common", or "globals"
+- `exclude`:  List of regexes or strings to match files that should be excluded from transpiling.  String paths can be absolute or relative to the watch.sourceDir.  Regexes are applied to the entire path. Regexes are applied to the entire path. By default anything in a vendor folder and anything that begins with 'main.' or 'main-', or that end in '-main' or 'common.js' are excluded as presumably those should not be wrapped in a  define as they are likely already "require"d or shimmed.
+- `globals`: `globals` contains configurations for modules that you want to export themselves globally if you are not using a module loading strategy. See the Example Config below for example usage of the `globals` config.
 
-Down the road when this `default` syntax is supported widely by libraries, you can just remove this module from your Mimosa project.
+## Example Config
+
+```coffeescript
+es6Modules:
+  type:"globals"
+  globals:
+    "/javascripts/app/example":
+      global: "ExampleApp"
+      imports:
+        jquery: "$"
+````
+
+- `global`'s keys are file paths to files in the `watch.sourceDir`. Each file that needs to export globally needs to have a path provided here. The path can include or not include the extension.
+- `global`: `global` is the name of the global object that the export from the module gets attached to, if not provided it gets attached to window.
+- `imports`: contains dependencies for the module, with the key being the variable name once imported and the value being the global name of the object to be imported. Any files not listed in globals are treated with the `type` config of either amd or common.
