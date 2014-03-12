@@ -19,7 +19,8 @@ var _transpile = function( mimosaConfig, options, next ) {
         } else {
           if ( f.outputFileText ) {
             var cOpts = {
-              type: es6m.type
+              type: es6m.type,
+              compatFix: true
             };
 
             if ( es6m.globals ) {

@@ -10,12 +10,6 @@ For more information regarding Mimosa, see http://mimosa.io
 
 Add `'es6-module-transpiler'` to your list of modules.  That's all!  Mimosa will install the module for you when you start up.
 
-## Using AMD w/ `0.5.0`+ of this module?
-
-In most cases AMD will not work by using just this module alone.  Pair this module with the [amd-shim module](https://github.com/dbashford/mimosa-es6-module-transpiler-amd-shim) to address any issues. See that module's [functionality description](https://github.com/dbashford/mimosa-es6-module-transpiler-amd-shim#functionality) for details on why it is necessary.
-
-If you need the shim, add `'es6-module-transpiler-amd-shim'` to your list of modules AFTER the `'es6-module-transpiler'`.
-
 ## Functionality
 
 This module will take your ES6 module syntax code and compile it down to a syntax usable with common module specs: AMD and CommonJS.
