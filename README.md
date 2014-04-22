@@ -16,9 +16,9 @@ This module will take your ES6 module syntax code and compile it down to a synta
 
 It will also allow you to compile it down to a format that exports code globally. If a module is exported globally, you may want to declare any `imports` it might have.  See the Example Config below.
 
-Using a JavaScript transpiler like CoffeeScript? This module's functionality is applied after Mimosa has compiled source source code, which means after CoffeeScript/LiveScript etc have been transpiled to JavaScript. So the source language's Embedded JavaScript features need to be used to preserve the ES6 syntax and to keep transpilation from failing.
+Using a JavaScript transpiler like CoffeeScript? For syntax like `import` to survive being transpiled, you must use the compilers built-in ability to pass some code through the transpiler.  CoffeeScript, for instance, uses the backtick to essentially have the CoffeeScript compiler ignore the code contained within.
 
-For example, the following CoffeeScript (note the backticks in the CoffeeScript code)...
+The CoffeeScript code below in an example:
 
 ```coffeescript
 `import $ from "jquery"`
