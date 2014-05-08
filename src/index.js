@@ -1,7 +1,7 @@
 "use strict";
 
 var path = require( "path" )
-  , Compiler = require("es6-module-transpiler").Compiler
+  , Compiler = null
   , config = require( "./config" )
   , logger = null;
 
@@ -9,6 +9,10 @@ var _transpile = function( mimosaConfig, options, next ) {
 
   if ( options.files && options.files.length ) {
     var es6m = mimosaConfig.es6Modules;
+
+    if ( !Compiler ) {
+      Compiler = require("es6-module-transpiler").Compiler;
+    }
 
     options.files.forEach( function( f ) {
       if ( es6m && es6m.excludeRegex && f.inputFileName.match( es6m.excludeRegex ) ) {

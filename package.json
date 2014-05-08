@@ -1,6 +1,6 @@
 {
   "name": "mimosa-es6-module-transpiler",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "homepage": "https://github.com/dbashford/mimosa-es6-module-transpiler",
   "author": "David Bashford",
   "description": "An ES6 module transpiler for Mimosa",
