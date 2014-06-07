@@ -24,6 +24,7 @@ var _transpile = function( mimosaConfig, options, next ) {
           if ( f.outputFileText ) {
             var cOpts = {
               type: es6m.type,
+              "infer-name": es6m.inferName,
               compatFix: true
             };
 

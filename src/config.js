@@ -6,6 +6,7 @@ exports.defaults = function() {
   return {
     es6Modules: {
       type:"amd",
+      inferName: true,
       exclude: [/[/\\]vendor[/\\]/, /[/\\]main[\.-]/, /-main.js$/, /[/\\]common.js$/],
       globals:{}
     }
@@ -15,6 +16,8 @@ exports.defaults = function() {
 exports.placeholder = function () {
   var ph = "\n  es6Modules:\n" +
     "    type:'amd'          # output type, either 'amd' or 'common' or 'globals'\n" +
+    "    inferName: true     # pass through to the es6-module-transpilers infer-name property\n" +
+    "                        # set to false for anonymous AMD modules.\n" +
     "    globals: {}         # globals contains configurations for modules that you want to\n" +
     "                        # export themselves globally if you are not using a module loading\n" +
     "                        # strategy. This section is only valid when 'globals' is the type.\n" +
@@ -49,8 +52,11 @@ exports.placeholder = function () {
 
 exports.validate = function( config, validators ) {
   var errors = [];
-  if ( validators.ifExistsIsObject(errors, "es6Modules config", config.es6Modules) ) {
+  if ( validators.ifExistsIsObject( errors, "es6Modules config", config.es6Modules ) ) {
     var es6m = config.es6Modules;
+
+    validators.ifExistsIsBoolean( errors, "es6Modules.inferName", config.es6Modules.inferName );
+
     if ( validators.ifExistsIsString(errors, "es6Modules.type", es6m.type ) ) {
       if ( [ "amd", "common", "globals" ].indexOf( es6m.type ) === -1 ) {
         errors.push( "es6Modules.type must be either 'amd', 'common' or 'globals'." );
